@@ -7,3 +7,6 @@
 [submodule "comet"]
 	path = comet
 	url = https://github.com/StardustXR/comet
+[submodule "armillary"]
+	path = armillary
+	url = https://github.com/StardustXR/armillary
