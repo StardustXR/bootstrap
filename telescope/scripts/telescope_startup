@@ -1,0 +1,10 @@
+#!/bin/bash
+
+xwayland-satellite :10 &
+export DISPLAY=:10
+
+flatland &
+gravity -- 0 0.0 -0.5 hexagon_launcher &
+black-hole &
+
+WAYLAND_DISPLAY=$FLAT_WAYLAND_DISPLAY manifold | simular &

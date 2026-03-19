@@ -1,0 +1,16 @@
+just := just_executable()
+export APPID := 'org.stardustxr.Telescope'
+rootdir := ''
+prefix := '/usr'
+base-dir := absolute_path(clean(rootdir / prefix))
+export INSTALL_DIR := base-dir / 'share'
+
+install:
+    install -Dm0755 scripts/telescope         "{{ base-dir / "bin" / "telescope" }}"
+    install -Dm0755 scripts/telescope_startup "{{ base-dir / "libexec" / "telescope_startup" }}"
+    {{ just }} data/install
+
+uninstall:
+    rm -f "{{ base-dir / "bin" / "telescope" }}"
+    rm -f "{{ base-dir / "libexec" / "telescope_startup" }}"
+    {{ just }} data/uninstall
