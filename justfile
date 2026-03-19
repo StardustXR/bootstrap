@@ -66,6 +66,9 @@ appdir-telescope: build
     install -Dm644 "telescope/data/org.stardustxr.Telescope.desktop" "{{ telescope_appdir }}/org.stardustxr.Telescope.desktop"
     install -Dm644 "telescope/data/org.stardustxr.Telescope.png" "{{ telescope_appdir }}/org.stardustxr.Telescope.png"
 
+update:
+    git submodule foreach 'git checkout main && git pull'
+
 prefix-install:
     {{ just }} rootdir="{{ justfile_directory() / 'prefix' }}" install
 
