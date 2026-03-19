@@ -1,12 +1,18 @@
-[submodule "server"]
-	path = server
+[submodule "org.stardustxr.Atmosphere"]
+	path = org.stardustxr.Atmosphere
+	url = https://github.com/StardustXR/atmosphere
+[submodule "org.stardustxr.Server"]
+	path = org.stardustxr.Server
 	url = https://github.com/StardustXR/server
-[submodule "flatland"]
-	path = flatland
+[submodule "org.stardustxr.Flatland"]
+	path = org.stardustxr.Flatland
 	url = https://github.com/StardustXR/flatland
-[submodule "comet"]
-	path = comet
+[submodule "org.stardustxr.Comet"]
+	path = org.stardustxr.Comet
 	url = https://github.com/StardustXR/comet
-[submodule "armillary"]
-	path = armillary
+[submodule "org.stardustxr.Armillary"]
+	path = org.stardustxr.Armillary
 	url = https://github.com/StardustXR/armillary
+[submodule "org.stardustxr.BlackHole"]
+	path = org.stardustxr.BlackHole
+	url = https://github.com/StardustXR/black-hole
