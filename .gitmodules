@@ -4,3 +4,6 @@
 [submodule "flatland"]
 	path = flatland
 	url = https://github.com/StardustXR/flatland
+[submodule "comet"]
+	path = comet
+	url = https://github.com/StardustXR/comet
