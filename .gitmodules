@@ -1,18 +1,40 @@
 [submodule "org.stardustxr.Atmosphere"]
 	path = org.stardustxr.Atmosphere
 	url = https://github.com/StardustXR/atmosphere
+	branch = "main"
 [submodule "org.stardustxr.Server"]
 	path = org.stardustxr.Server
 	url = https://github.com/StardustXR/server
+	branch = "main"
 [submodule "org.stardustxr.Flatland"]
 	path = org.stardustxr.Flatland
 	url = https://github.com/StardustXR/flatland
+	branch = "main"
 [submodule "org.stardustxr.Comet"]
 	path = org.stardustxr.Comet
 	url = https://github.com/StardustXR/comet
+	branch = "main"
 [submodule "org.stardustxr.Armillary"]
 	path = org.stardustxr.Armillary
 	url = https://github.com/StardustXR/armillary
+	branch = "main"
 [submodule "org.stardustxr.BlackHole"]
 	path = org.stardustxr.BlackHole
 	url = https://github.com/StardustXR/black-hole
+	branch = "main"
+[submodule "org.stardustxr.Gravity"]
+	path = org.stardustxr.Gravity
+	url = https://github.com/StardustXR/gravity
+	branch = "main"
+[submodule "org.stardustxr.NonSpatialInput"]
+	path = org.stardustxr.NonSpatialInput
+	url = https://github.com/StardustXR/non-spatial-input
+	branch = "main"
+[submodule "org.stardustxr.Protostar"]
+	path = org.stardustxr.Protostar
+	url = https://github.com/StardustXR/protostar
+	branch = "main"
+[submodule "org.stardustxr.SolarSailer"]
+	path = org.stardustxr.SolarSailer
+	url = https://github.com/StardustXR/solar-sailer
+	branch = "main"
