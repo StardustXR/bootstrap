@@ -10,36 +10,29 @@ Meta-repo for building and installing all Stardust XR components.
 
 ### Build dependencies
 
-| Library | Fedora | Ubuntu | Arch |
-|---------|--------|--------|------|
-| alsa | `alsa-lib-devel` | `libasound2-dev` | `alsa-lib` |
-| libevdev | `libevdev-devel` | `libevdev-dev` | `libevdev` |
-| libffi | `libffi-devel` | `libffi-dev` | `libffi` |
-| glib/gobject | `glib2-devel` | `libglib2.0-dev` | `glib2` |
-| libgudev | `libgudev-devel` | `libgudev-1.0-dev` | `libgudev` |
-| libinput | `libinput-devel` | `libinput-dev` | `libinput` |
-| mtdev | `mtdev-devel` | `libmtdev-dev` | `mtdev` |
-| libwacom | `libwacom-devel` | `libwacom-dev` | `libwacom` |
-| wayland | `wayland-devel` | `libwayland-dev` | `wayland` |
-| libxkbcommon | `libxkbcommon-devel` | `libxkbcommon-dev` | `libxkbcommon` |
-| libxkbcommon-x11 | `libxkbcommon-x11-devel` | `libxkbcommon-x11-dev` | `libxkbcommon-x11` |
-| libxcb | `libxcb-devel` | `libxcb1-dev libxcb-xkb-dev` | `libxcb` |
-| udev | `systemd-devel` | `libudev-dev` | `systemd-libs` |
-| libcap | `libcap-devel` | `libcap-dev` | `libcap` |
+| Library | Used by | Fedora | Ubuntu | Arch |
+|---------|---------|--------|--------|------|
+| wayland | stardust-xr-server | `wayland-devel` | `libwayland-dev` | `wayland` |
+| alsa | stardust-xr-server | `alsa-lib-devel` | `libasound2-dev` | `alsa-lib` |
+| libffi | stardust-xr-server | `libffi-devel` | `libffi-dev` | `libffi` |
+| libinput | eclipse | `libinput-devel` | `libinput-dev` | `libinput` |
+| libxkbcommon | azimuth, eclipse, manifold, simular | `libxkbcommon-devel` | `libxkbcommon-dev` | `libxkbcommon` |
 
-**Ubuntu:**
-```sh
-sudo apt install libasound2-dev libevdev-dev libffi-dev libglib2.0-dev libgudev-1.0-dev libinput-dev libmtdev-dev libwacom-dev libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev libxcb1-dev libxcb-xkb-dev libudev-dev libcap-dev
-```
+Other libraries (libevdev, mtdev, libwacom, libgudev, glib, udev, libcap, libxcb) are pulled in transitively by the above.
 
 **Fedora:**
 ```sh
-sudo dnf install alsa-lib-devel libevdev-devel libffi-devel glib2-devel libgudev-devel libinput-devel mtdev-devel libwacom-devel wayland-devel libxkbcommon-devel libxkbcommon-x11-devel libxcb-devel systemd-devel libcap-devel
+sudo dnf install wayland-devel alsa-lib-devel libffi-devel libinput-devel libxkbcommon-devel
+```
+
+**Ubuntu:**
+```sh
+sudo apt install libwayland-dev libasound2-dev libffi-dev libinput-dev libxkbcommon-dev
 ```
 
 **Arch:**
 ```sh
-sudo pacman -S alsa-lib libevdev libffi glib2 libgudev libinput mtdev libwacom wayland libxkbcommon libxkbcommon-x11 libxcb systemd-libs libcap
+sudo pacman -S wayland alsa-lib libffi libinput libxkbcommon
 ```
 
 ## Setup

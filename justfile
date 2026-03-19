@@ -4,7 +4,6 @@ prefix := '/usr'
 telescope_appdir := justfile_directory() / "Telescope.AppDir"
 
 build:
-    mkdir -p build
     {{ just }} org.stardustxr.Armillary/build-release
     {{ just }} org.stardustxr.Atmosphere/build-release
     {{ just }} org.stardustxr.BlackHole/build-release
