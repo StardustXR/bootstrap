@@ -1,4 +1,6 @@
 [submodule "server"]
 	path = server
 	url = https://github.com/StardustXR/server
-	branch = main
+[submodule "flatland"]
+	path = flatland
+	url = https://github.com/StardustXR/flatland
