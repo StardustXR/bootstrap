@@ -43,27 +43,23 @@ appdir-telescope: build
     mkdir -p "{{ telescope_appdir }}"
 
     # Install all the stardust components
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" org.stardustxr.Armillary/install
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" org.stardustxr.BlackHole/install
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" org.stardustxr.Comet/install
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" org.stardustxr.Flatland/install
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" org.stardustxr.Gravity/install
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" org.stardustxr.NonSpatialInput/install
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" org.stardustxr.Protostar/install
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" org.stardustxr.SolarSailer/install
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" org.stardustxr.Server/install
+    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" install
 
     # xwayland-satellite
-    cargo install --locked --git "https://github.com/Supreeeme/xwayland-satellite" --root "{{ telescope_appdir }}/usr" --force
-    rm -f "{{ telescope_appdir }}/usr/.crates.toml" "{{ telescope_appdir }}/usr/.crates2.json"
+    if ! test -f "{{ telescope_appdir }}/usr/bin/xwayland-satellite"; then \
+        cargo install --locked --git "https://github.com/Supreeeme/xwayland-satellite" --root "{{ telescope_appdir }}/usr" --force && \
+        rm -f "{{ telescope_appdir }}/usr/.crates.toml" "{{ telescope_appdir }}/usr/.crates2.json"; \
+    fi
 
     # Telescope stuff
     install -Dm755 "telescope/scripts/telescope" "{{ telescope_appdir }}/usr/bin/telescope"
     install -Dm755 "telescope/scripts/telescope_startup" "{{ telescope_appdir }}/usr/libexec/telescope_startup"
-    printf '#!/bin/bash\nexport PATH="$APPDIR/usr/bin:$PATH"\nexport LD_LIBRARY_PATH="$APPDIR/usr/lib:$LD_LIBRARY_PATH"\nexport STARDUST_THEMES="$APPDIR/usr/share"\nexec telescope "$@"\n' > "{{ telescope_appdir }}/AppRun"
-    chmod +x "{{ telescope_appdir }}/AppRun"
+    install -Dm755 "telescope/scripts/AppRun" "{{ telescope_appdir }}/AppRun"
     install -Dm644 "telescope/data/org.stardustxr.Telescope.desktop" "{{ telescope_appdir }}/org.stardustxr.Telescope.desktop"
     install -Dm644 "telescope/data/org.stardustxr.Telescope.png" "{{ telescope_appdir }}/org.stardustxr.Telescope.png"
+
+test-telescope: appdir-telescope
+    APPDIR="{{ telescope_appdir }}" "{{ telescope_appdir }}/AppRun"
 
 update:
     git submodule foreach 'git checkout main && git pull'
