@@ -66,6 +66,11 @@ update:
 
 prefix-install:
     {{ just }} rootdir="{{ justfile_directory() / 'prefix' }}" install
+    [ -e "{{ justfile_directory() }}/startup.sh" ] || install -Dm755 "telescope/scripts/telescope_startup" "{{ justfile_directory() }}/startup.sh"
+
+[no-exit-message]
+prefix-run *args:
+    PATH="{{ justfile_directory() / 'prefix' / 'usr' / 'bin' }}:{{ env('PATH') }}" {{ justfile_directory() / 'prefix' / 'usr' / 'bin' / 'stardust-xr-server' }} -o 6 -e {{ justfile_directory() / 'startup.sh' }} {{ args }}
 
 clean:
     rm -rf org.stardustxr.Armillary/target
