@@ -14,6 +14,7 @@ build:
     {{ just }} org.stardustxr.Protostar/build-release
     {{ just }} org.stardustxr.SolarSailer/build-release
     {{ just }} org.stardustxr.Server/build-release
+    echo a
 
 install: build
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Atmosphere/install
@@ -45,11 +46,11 @@ appdir-telescope: build
     # Install all the stardust components
     {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" install
 
-    # xwayland-satellite
-    if ! test -f "{{ telescope_appdir }}/usr/bin/xwayland-satellite"; then \
-        cargo install --locked --git "https://github.com/Supreeeme/xwayland-satellite" --root "{{ telescope_appdir }}/usr" --force && \
-        rm -f "{{ telescope_appdir }}/usr/.crates.toml" "{{ telescope_appdir }}/usr/.crates2.json"; \
-    fi
+    # # xwayland-satellite
+    # if ! test -f "{{ telescope_appdir }}/usr/bin/xwayland-satellite"; then \
+    #     cargo install --locked --git "https://github.com/Supreeeme/xwayland-satellite" --root "{{ telescope_appdir }}/usr" --force && \
+    #     rm -f "{{ telescope_appdir }}/usr/.crates.toml" "{{ telescope_appdir }}/usr/.crates2.json"; \
+    # fi
 
     # Telescope stuff
     install -Dm755 "telescope/scripts/telescope" "{{ telescope_appdir }}/usr/bin/telescope"
@@ -83,3 +84,40 @@ clean:
     rm -rf org.stardustxr.Protostar/target
     rm -rf org.stardustxr.SolarSailer/target
     rm -rf org.stardustxr.Server/target
+
+generate-sysext:
+    #!/usr/bin/env bash
+    SYSEXT_ROOTFS="$PWD/sysext_rootfs"
+    SYSEXT_OUT="$PWD/sysext_out"
+    SYSEXT_NAME="stardust-bootstrap"
+    mkdir -p "${SYSEXT_ROOTFS}"
+
+    {{ just }} "prefix=${SYSEXT_ROOTFS}" build
+    {{ just }} "prefix=${SYSEXT_ROOTFS}" install
+    {{ just }} -f telescope/justfile "prefix=${SYSEXT_ROOTFS}" install
+
+    install -d "${SYSEXT_ROOTFS}"
+    shopt -s extglob
+    mkdir -p "${SYSEXT_ROOTFS}/usr"
+    mv ${SYSEXT_ROOTFS}/!(usr) "${SYSEXT_ROOTFS}/usr"
+    rm ${SYSEXT_ROOTFS}/!(usr)
+
+    install -dm0755 "${SYSEXT_ROOTFS}/usr/lib/extension-release.d"
+    tee "${SYSEXT_ROOTFS}/usr/lib/extension-release.d/extension-release.${SYSEXT_NAME}" <<EOF
+    ID="_any"
+    ARCHITECTURE="$(sed 's/_/-/g' <<< "$(arch)")"
+    EOF
+
+    filecontexts="/etc/selinux/targeted/contexts/files/file_contexts"
+    if [ -e $filecontexts ] ; then
+        setfiles -r "${SYSEXT_ROOTFS}" "${filecontexts}" "${SYSEXT_ROOTFS}"
+        chcon --user=system_u --recursive "${SYSEXT_ROOTFS}"
+    fi
+    mkdir -p "${SYSEXT_OUT}"
+    mkfs.erofs "${SYSEXT_OUT}/${SYSEXT_NAME}.raw" "${SYSEXT_ROOTFS}"
+
+install-sysext: generate-sysext
+    #!/usr/bin/env bash
+    SYSEXT_OUT="$PWD/sysext_out"
+    SYSEXT_NAME="stardust-bootstrap"
+    sudo cp -f "${SYSEXT_OUT}/${SYSEXT_NAME}.raw" /var/lib/extensions
