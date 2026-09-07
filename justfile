@@ -2,6 +2,7 @@ just := just_executable()
 rootdir := ''
 prefix := '/usr'
 telescope_appdir := justfile_directory() / "Telescope.AppDir"
+prefix_dir := justfile_directory() / 'prefix' / 'usr'
 
 build:
     {{ just }} org.stardustxr.Armillary/build-release
@@ -73,7 +74,10 @@ prefix-install:
 
 [no-exit-message]
 prefix-run *args:
-    PATH="{{ justfile_directory() / 'prefix' / 'usr' / 'bin' }}:{{ env('PATH') }}" {{ justfile_directory() / 'prefix' / 'usr' / 'bin' / 'stardust-xr-server' }} -o 6 -e {{ justfile_directory() / 'startup.sh' }} {{ args }}
+    PATH="{{ prefix_dir / 'bin' }}:{{ env('PATH') }}" \
+    XDG_DATA_DIRS="{{ prefix_dir / 'share' }}:{{ env('XDG_DATA_DIRS', '/usr/local/share:/usr/share') }}" \
+    STARDUST_RES_PREFIXES="{{ prefix_dir / 'share' }}:{{ env('STARDUST_RES_PREFIXES', '/usr/share') }}" \
+    {{ prefix_dir / 'bin' / 'stardust-xr-server' }} -o 6 -e {{ justfile_directory() / 'startup.sh' }} {{ args }}
 
 clean:
     rm -rf org.stardustxr.Armillary/target
