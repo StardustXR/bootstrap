@@ -1,5 +1,8 @@
 #!/bin/bash
 
+stardust-xr-wayland-service wayland-32 &
+export WAYLAND_DISPLAY=wayland-32
+
 xwayland-satellite :10 &
 export DISPLAY=:10
 

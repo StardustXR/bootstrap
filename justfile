@@ -14,6 +14,7 @@ build:
     {{ just }} org.stardustxr.Protostar/build-release
     {{ just }} org.stardustxr.SolarSailer/build-release
     {{ just }} org.stardustxr.Server/build-release
+    {{ just }} org.stardustxr.WaylandService/build-release
 
 install: build
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Atmosphere/install
@@ -26,6 +27,7 @@ install: build
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Protostar/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.SolarSailer/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Server/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.WaylandService/install
 
 uninstall:
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Armillary/uninstall
@@ -38,6 +40,7 @@ uninstall:
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Protostar/uninstall
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.SolarSailer/uninstall
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Server/uninstall
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.WaylandService/uninstall
 
 appdir-telescope: build
     mkdir -p "{{ telescope_appdir }}"
@@ -62,7 +65,7 @@ test-telescope: appdir-telescope
     APPDIR="{{ telescope_appdir }}" "{{ telescope_appdir }}/AppRun"
 
 update:
-    git submodule foreach 'git checkout main && git pull'
+    git submodule foreach 'git checkout "$(git -C "$toplevel" config -f .gitmodules --get submodule."$name".branch || echo main)" && git pull'
 
 prefix-install:
     {{ just }} rootdir="{{ justfile_directory() / 'prefix' }}" install
@@ -83,3 +86,4 @@ clean:
     rm -rf org.stardustxr.Protostar/target
     rm -rf org.stardustxr.SolarSailer/target
     rm -rf org.stardustxr.Server/target
+    rm -rf org.stardustxr.WaylandService/target
