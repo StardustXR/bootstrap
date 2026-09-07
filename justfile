@@ -62,8 +62,8 @@ appdir-telescope: build
     install -Dm644 "telescope/data/org.stardustxr.Telescope.desktop" "{{ telescope_appdir }}/org.stardustxr.Telescope.desktop"
     install -Dm644 "telescope/data/org.stardustxr.Telescope.png" "{{ telescope_appdir }}/org.stardustxr.Telescope.png"
 
-test-telescope: appdir-telescope
-    APPDIR="{{ telescope_appdir }}" "{{ telescope_appdir }}/AppRun"
+test-telescope *args: appdir-telescope
+    APPDIR="{{ telescope_appdir }}" "{{ telescope_appdir }}/AppRun" {{ args }}
 
 update:
     git submodule foreach 'git checkout "$(git -C "$toplevel" config -f .gitmodules --get submodule."$name".branch || echo main)" && git pull'
