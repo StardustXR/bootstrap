@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 APPDIR="${APPDIR:-"$(cd "$(dirname "$0")" && pwd)"}"
 

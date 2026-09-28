@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if ! [[ -z $WAYLAND_DISPLAY ]]; then
 export FLAT_WAYLAND_DISPLAY=$WAYLAND_DISPLAY
