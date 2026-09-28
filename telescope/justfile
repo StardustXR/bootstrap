@@ -8,6 +8,7 @@ export INSTALL_DIR := base-dir / 'share'
 install:
     install -Dm0755 scripts/telescope         "{{ base-dir / "bin" / "telescope" }}"
     install -Dm0755 scripts/telescope_startup "{{ base-dir / "libexec" / "telescope_startup" }}"
+    install -Dm0755 scripts/telescope_default_panel_shell "{{ base-dir / "libexec" / "telescope_default_panel_shell" }}"
     {{ just }} data/install
 
 uninstall:

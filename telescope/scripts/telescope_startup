@@ -1,12 +1,15 @@
 #!/bin/bash
 
-stardust-xr-wayland-service wayland-32 &
-export WAYLAND_DISPLAY=wayland-32
+if ! [[ -z $WAYLAND_DISPLAY ]]; then
+export FLAT_WAYLAND_DISPLAY=$WAYLAND_DISPLAY
+fi
 
-xwayland-satellite :10 &
-export DISPLAY=:10
+export WAYLAND_DISPLAY=$(display-socket-finder wayland)
+stardust-xr-wayland-service -p "${APPDIR:-}/usr/libexec/telescope_default_panel_shell" $WAYLAND_DISPLAY &
 
-flatland &
+export DISPLAY=$(display-socket-finder x11)
+sleep 0.5 && xwayland-satellite $DISPLAY &
+
 gravity -- 0 0.0 -0.5 hexagon_launcher &
 black-hole &
 

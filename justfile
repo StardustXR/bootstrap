@@ -58,6 +58,7 @@ appdir-telescope: build
     # Telescope stuff
     install -Dm755 "telescope/scripts/telescope" "{{ telescope_appdir }}/usr/bin/telescope"
     install -Dm755 "telescope/scripts/telescope_startup" "{{ telescope_appdir }}/usr/libexec/telescope_startup"
+    install -Dm755 "telescope/scripts/telescope_default_panel_shell" "{{ telescope_appdir }}/usr/libexec/telescope_default_panel_shell"
     install -Dm755 "telescope/scripts/AppRun" "{{ telescope_appdir }}/AppRun"
     install -Dm644 "telescope/data/org.stardustxr.Telescope.desktop" "{{ telescope_appdir }}/org.stardustxr.Telescope.desktop"
     install -Dm644 "telescope/data/org.stardustxr.Telescope.png" "{{ telescope_appdir }}/org.stardustxr.Telescope.png"
