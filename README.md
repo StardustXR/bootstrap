@@ -81,19 +81,21 @@ Add the overlay to your `flake.nix`:
   };
 }
 ```
-Then install the desired packages:
+Then install the desired packages. Everything is under `pkgs.stardust`: `telescope`, `stardust-xr` (all components), and each component (e.g. `pkgs.stardust.comet`).
 
-home-manger:
+home-manager:
 ```nix
 home.packages = [
-    pkgs.telescope
+    # install everything
+    pkgs.stardust.telescope
 ];
 ```
 
 configuration.nix:
 ```nix
 environment.systemPackages = [
-    pkgs.telescope
+    # install everything
+    pkgs.stardust.telescope
 ];
 ```
 

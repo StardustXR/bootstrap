@@ -160,11 +160,8 @@
       );
 
       overlays.default =
-        final: _prev:
-        componentsFor final.stdenv.hostPlatform.system
-        // {
-          stardust-xr = self.packages.${final.stdenv.hostPlatform.system}.stardust-xr;
-          telescope = self.packages.${final.stdenv.hostPlatform.system}.telescope;
+        final: _prev: {
+          stardust = removeAttrs self.packages.${final.stdenv.hostPlatform.system} [ "default" ];
         };
 
       apps = forAllSystems (system: {
