@@ -16,6 +16,7 @@ build:
     {{ just }} org.stardustxr.SolarSailer/build-release
     {{ just }} org.stardustxr.Server/build-release
     {{ just }} org.stardustxr.WaylandService/build-release
+    {{ just }} org.stardustxr.PalmLauncher/build-release
 
 install: build
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Atmosphere/install
@@ -29,6 +30,7 @@ install: build
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.SolarSailer/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Server/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.WaylandService/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.PalmLauncher/install
 
 uninstall:
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Armillary/uninstall
@@ -42,6 +44,7 @@ uninstall:
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.SolarSailer/uninstall
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Server/uninstall
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.WaylandService/uninstall
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.PalmLauncher/uninstall
 
 appdir-telescope: build
     mkdir -p "{{ telescope_appdir }}"
@@ -92,3 +95,4 @@ clean:
     rm -rf org.stardustxr.SolarSailer/target
     rm -rf org.stardustxr.Server/target
     rm -rf org.stardustxr.WaylandService/target
+    rm -rf org.stardustxr.PalmLauncher/target

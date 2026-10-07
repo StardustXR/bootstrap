@@ -31,3 +31,6 @@
 [submodule "org.stardustxr.WaylandService"]
 	path = org.stardustxr.WaylandService
 	url = https://github.com/StardustXR/wayland-service
+[submodule "org.stardustxr.PalmLauncher"]
+	path = org.stardustxr.PalmLauncher
+	url = https://github.com/StardustXR/palm-launcher
