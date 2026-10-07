@@ -23,6 +23,7 @@
     non-spatial-input.url = "github:StardustXR/non-spatial-input";
     protostar.url = "github:StardustXR/protostar";
     solar-sailer.url = "github:StardustXR/solar-sailer";
+    wayland-service.url = "github:StardustXR/wayland-service";
 
     # the server
     server = {
@@ -54,6 +55,7 @@
           non-spatial-input
           protostar
           solar-sailer
+          wayland-service
           ;
         stardust-xr-server = inputs.server;
       };
@@ -100,6 +102,15 @@
             meta.description = "All Stardust XR components in one prefix";
           };
 
+          # Panel shell that wayland-service spawns to display its panels.
+          telescope-default-panel-shell = pkgs.writeShellApplication {
+            name = "telescope_default_panel_shell";
+            runtimeInputs = [ stardust-xr ];
+            text = ''
+              exec flatland -d
+            '';
+          };
+
           # telescope_startup, with every binary resolved from the bundle.
           telescope-startup = pkgs.writeShellApplication {
             name = "telescope_startup";
@@ -108,10 +119,18 @@
               pkgs.xwayland-satellite
             ];
             text = ''
-              xwayland-satellite :10 &
-              export DISPLAY=:10
+              if [[ -n "''${WAYLAND_DISPLAY:-}" ]]; then
+                export FLAT_WAYLAND_DISPLAY="$WAYLAND_DISPLAY"
+              fi
 
-              flatland &
+              WAYLAND_DISPLAY="$(display-socket-finder wayland)"
+              export WAYLAND_DISPLAY
+              stardust-xr-wayland-service -p ${lib.getExe telescope-default-panel-shell} "$WAYLAND_DISPLAY" &
+
+              DISPLAY="$(display-socket-finder x11)"
+              export DISPLAY
+              sleep 0.5 && xwayland-satellite "$DISPLAY" &
+
               gravity -- 0 0.0 -0.5 hexagon_launcher &
               black-hole &
 
@@ -141,6 +160,7 @@
             paths = [
               telescope-bin
               telescope-startup
+              telescope-default-panel-shell
               stardust-xr
             ];
             postBuild = ''
