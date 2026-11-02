@@ -5,7 +5,7 @@ export FLAT_WAYLAND_DISPLAY=$WAYLAND_DISPLAY
 fi
 
 export WAYLAND_DISPLAY=$(display-socket-finder wayland)
-stardust-xr-wayland-service -p "${APPDIR:-}/usr/libexec/telescope_default_panel_shell" $WAYLAND_DISPLAY &
+stardust-xr-wayland-service -p flatland $WAYLAND_DISPLAY &
 
 export DISPLAY=$(display-socket-finder x11)
 sleep 0.5 && xwayland-satellite $DISPLAY &
