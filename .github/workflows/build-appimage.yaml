@@ -51,16 +51,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y g++ pkg-config libfontconfig1-dev libvulkan1 libxkbcommon-dev xwayland libwayland-dev libx11-dev libasound2-dev libxkbcommon-x11-0 libopenxr-dev libxkbcommon-x11-dev libxcb-cursor-dev desktop-file-utils just libudev-dev libinput-dev
 
-      - name: Download appimagetool
-        run: |
-          wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${{ matrix.arch }}.AppImage -O appimagetool
-          chmod +x appimagetool
-      - name: Build AppDir
-        run: just server_cargo_flags="${{matrix.server_flags}}" server_env_vars='${{matrix.server_env_vars}}' telescope_appdir="$PWD/Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppDir" appdir-telescope
-
       - name: Build AppImage
-        run: |
-          ./appimagetool "Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppDir" Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppImage
+        run: just server_cargo_flags="${{matrix.server_flags}}" server_env_vars='${{matrix.server_env_vars}}' telescope_appdir="$PWD/Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppDir" appimage-telescope "Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppImage"
 
       - name: Upload AppDir
         uses: actions/upload-artifact@v7

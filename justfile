@@ -5,6 +5,11 @@ server_env_vars := ''
 prefix := '/usr'
 telescope_appdir := justfile_directory() / "Telescope.AppDir"
 prefix_dir := justfile_directory() / 'prefix' / 'usr'
+# signed by the type2-runtime key 570C77ACEA40C0F1B758902CBF96CCA56490F695
+appimage_runtime_version := '20251108'
+appimage_runtime_sha256 := if arch() == "x86_64" { '2fca8b443c92510f1483a883f60061ad09b46b978b2631c807cd873a47ec260d' } else if arch() == "aarch64" { '00cbdfcf917cc6c0ff6d3347d59e0ca1f7f45a6df1a428a0d6d8a78664d87444' } else { '' }
+appimagetool_version := '1.9.1'
+appimagetool_sha256 := if arch() == "x86_64" { 'ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0' } else if arch() == "aarch64" { 'f0837e7448a0c1e4e650a93bb3e85802546e60654ef287576f46c71c126a9158' } else { '' }
 
 build:
     {{ just }} org.stardustxr.Armillary/build-release
@@ -92,6 +97,18 @@ appdir-telescope: build_read_only_deps
     install -Dm755 "telescope/scripts/AppRun" "{{ telescope_appdir }}/AppRun"
     install -Dm644 "telescope/data/org.stardustxr.Telescope.desktop" "{{ telescope_appdir }}/org.stardustxr.Telescope.desktop"
     install -Dm644 "telescope/data/org.stardustxr.Telescope.png" "{{ telescope_appdir }}/org.stardustxr.Telescope.png"
+
+appimage-telescope appimage=("Telescope-" + arch() + ".AppImage"): appdir-telescope
+    #!/usr/bin/env sh
+    set -eu
+    tmp="$(mktemp -d)"
+    trap 'rm -rf "$tmp"' EXIT
+    curl -sSLf -o "$tmp/appimagetool" "https://github.com/AppImage/appimagetool/releases/download/{{ appimagetool_version }}/appimagetool-{{ arch() }}.AppImage"
+    curl -sSLf -o "$tmp/runtime" "https://github.com/AppImage/type2-runtime/releases/download/{{ appimage_runtime_version }}/runtime-{{ arch() }}"
+    printf '%s  %s\n' "{{ appimagetool_sha256 }}" "$tmp/appimagetool" "{{ appimage_runtime_sha256 }}" "$tmp/runtime" | sha256sum -c
+    chmod +x "$tmp/appimagetool"
+    # without --runtime-file appimagetool downloads the unpinned continuous runtime
+    "$tmp/appimagetool" --runtime-file "$tmp/runtime" "{{ telescope_appdir }}" "{{ appimage }}"
 
 test-telescope *args: appdir-telescope
     APPDIR="{{ telescope_appdir }}" "{{ telescope_appdir }}/AppRun" {{ args }}
