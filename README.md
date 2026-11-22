@@ -41,6 +41,64 @@ sudo pacman -S wayland alsa-lib libffi libinput libxkbcommon
 git clone --recursive <repo-url>
 ```
 
+### NixOS
+**Run directly:**  
+Start `telescope`
+```sh
+nix run github:StardustXR/bootstrap
+```
+
+Run the server without any components
+```sh
+nix run github:StardustXR/bootstrap#stardust-xr-server
+```
+
+All components are also included in the flake. For example, to run `comet`:
+```sh
+nix run github:StardustXR/bootstrap#comet
+```
+
+**Install:**  
+Add the overlay to your `flake.nix`:
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    stardust.url = "github:StardustXR/bootstrap";
+  };
+
+  outputs = { nixpkgs, stardust, ... }: {
+    nixosConfigurations.<hostname> = nixpkgs.lib.nixosSystem {
+      modules = [
+        ./configuration.nix
+        ({
+          nixpkgs.overlays = [
+              stardust.overlays.default
+          ];
+        })
+      ];
+    };
+  };
+}
+```
+Then install the desired packages. Everything is under `pkgs.stardust`: `telescope`, `stardust-xr` (all components), and each component (e.g. `pkgs.stardust.comet`).
+
+home-manager:
+```nix
+home.packages = [
+    # install everything
+    pkgs.stardust.telescope
+];
+```
+
+configuration.nix:
+```nix
+environment.systemPackages = [
+    # install everything
+    pkgs.stardust.telescope
+];
+```
+
 ## Commands
 
 | Command | Description |
